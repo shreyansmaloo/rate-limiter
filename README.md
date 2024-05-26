@@ -1,21 +1,23 @@
-# Rate Limiter
-This rate limiter implementation uses the token bucket algorithm to monitor and control the number of requests per user and API combination. It supports configurable API-specific and default rate limits. The solution is easily configurable, production-ready, and includes automated tests to ensure correctness.
+# Rate Limiter Project
 
-## Overview
-This is a rate limiter implementation using the token bucket algorithm. It supports different rate limits for different APIs and a default rate limit.
+## Description
+This project implements a simple rate limiter in Java using the token bucket algorithm. The rate limiter monitors the number of requests per second a service allows and blocks excess calls if the limit is exceeded.
 
-## Configuration
-- Default rate limit: 5 requests per second.
-- API-specific rate limits can be configured.
+## Implementation
+The project consists of the following classes:
+- `TokenBucket`: Represents the token bucket used by the rate limiter.
+- `RateLimiter`: Implements the rate limiting logic, allowing requests based on the token bucket's state.
+- `Main`: Contains a simple example demonstrating how to use the rate limiter.
 
 ## Usage
+To use the rate limiter, create an instance of `RateLimiter` with the desired capacity and refill rate. Then, call the `allowRequest` method to check if a request is allowed.
+
+Example usage:
 ```java
-RateLimit defaultRateLimit = new RateLimit(5, 1, TimeUnit.SECONDS);
-RateLimitConfig config = new RateLimitConfig(defaultRateLimit);
-config.addRateLimit("api1", new RateLimit(10, 1, TimeUnit.SECONDS));
-RateLimiter rateLimiter = new TokenBucketRateLimiter(config);
-
-String userId = "user1";
-String api = "api1";
-
-boolean isAllowed = rateLimiter.isAllowed(userId, api);
+RateLimiter rateLimiter = new RateLimiter(10, 1.0); // 10 requests per second
+if (rateLimiter.allowRequest("user1", 1)) {
+    // Process the request
+} else {
+    // Reject the request
+}
+```
